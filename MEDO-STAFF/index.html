@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEDO-STAFF</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <h1>🏥 MEDO-STAFF</h1>
+                    <nav class="nav">
+                        <button class="nav-btn active" data-page="dashboard">📊 Dashboard</button>
+                        <button class="nav-btn" data-page="workers">👥 Workers</button>
+                        <button class="nav-btn" data-page="schedule">📅 Schedule</button>
+                        <button class="nav-btn" data-page="results">📈 Results</button>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="container">
+                <!-- Dashboard Page -->
+                <div id="dashboard" class="page active">
+                    <div class="page-header">
+                        <h2>Dashboard Overview</h2>
+                        <p>AI-powered healthcare staff scheduling and analytics</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalWorkers">5</div>
+                            <div class="stat-label">Total Workers</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalShifts">21</div>
+                            <div class="stat-label">Weekly Shifts</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="avgHours">32.5</div>
+                            <div class="stat-label">Avg Hours/Worker</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="staffingCoverage">92%</div>
+                            <div class="stat-label">Staffing Coverage</div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-sections">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>🤖 AI Recommendations</h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="aiRecommendations">
+                                    <div class="loading">Generating AI recommendations...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>👥 Workers Overview</h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="workersOverview">
+                                    <div class="empty-state">Add workers to see overview</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Worker Management Page -->
+                <div id="workers" class="page">
+                    <div class="page-header">
+                        <h2>Worker Management</h2>
+                        <p>Add workers, manage leave status, and view assignments</p>
+                    </div>
+
+                    <div class="workers-sections">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>➕ Add New Workers</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="form-group">
+                                    <textarea id="workerNames" class="form-control" placeholder="Enter worker names (one per line)&#10;Example:&#10;Dr. Smith&#10;Nurse Johnson&#10;Tech Williams" rows="4"></textarea>
+                                </div>
+                                <button onclick="addWorkers()" class="btn btn--primary btn--full-width">Add Workers</button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>👥 Current Workers</h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="workersList">
+                                    <div class="empty-state">No workers added yet</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>🏥 Update Leave Status</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="leave-form">
+                                    <div>
+                                        <label class="form-label">Worker</label>
+                                        <select id="leaveWorker" class="form-control">
+                                            <option value="">Select Worker</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Leave Type</label>
+                                        <select id="leaveType" class="form-control">
+                                            <option value="sick">Sick Leave</option>
+                                            <option value="out_of_station">Out of Station</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Days</label>
+                                        <input type="number" id="leaveDays" class="form-control" min="0" max="7" value="0">
+                                    </div>
+                                    <div>
+                                        <button onclick="updateLeave()" class="btn btn--primary">Update Leave</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedule Management Page -->
+                <div id="schedule" class="page">
+                    <div class="page-header">
+                        <h2>Schedule Management</h2>
+                        <p>AI-optimized weekly scheduling with color-coded assignments</p>
+                    </div>
+
+                    <div class="schedule-controls">
+                        <button onclick="generateSchedule()" class="btn btn--primary btn--lg">🤖 Generate AI Schedule</button>
+                        <button onclick="exportSchedule()" class="btn btn--secondary">📊 Export Schedule</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card__header">
+                            <h3>📅 Weekly Schedule (Color-Coded)</h3>
+                        </div>
+                        <div class="card__body">
+                            <div id="scheduleDisplay">
+                                <div class="empty-state">Click "Generate AI Schedule" to create the optimized weekly schedule</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card__header">
+                            <h3>⚙️ Staffing Requirements</h3>
+                        </div>
+                        <div class="card__body">
+                            <div id="staffingRequirements">
+                                <!-- Staffing requirements will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results & Analytics Page -->
+                <div id="results" class="page">
+                    <div class="page-header">
+                        <h2>Results &amp; Analytics</h2>
+                        <p>Schedule performance metrics and customer feedback</p>
+                    </div>
+
+                    <div class="results-sections">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>📊 Schedule Statistics</h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="scheduleStats">
+                                    <div class="loading">Loading statistics...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>⭐ Customer Feedback Rating<span class="text-muted">Data from Google Forms API</span></h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="customerFeedback">
+                                    <div class="loading">Loading customer feedback from Google Forms...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>📝 API Names<span class="text-muted">Names returned from API</span></h3>
+                            </div>
+                            <div class="card__body">
+                                <textarea id="apiNames" class="form-control" rows="8" readonly></textarea>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>⭐ API Ratings<span class="text-muted">Ratings returned from API</span></h3>
+                            </div>
+                            <div class="card__body">
+                                <textarea id="apiRatings" class="form-control" rows="8" readonly></textarea>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>🤖 AI Performance Analysis</h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="aiAnalysis">
+                                    <div class="loading">AI analyzing schedule performance...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>📈 Performance Trends</h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="performanceTrends">
+                                    <div class="loading">Generating performance trends...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
